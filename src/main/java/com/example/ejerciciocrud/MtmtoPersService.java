@@ -2,10 +2,7 @@ package com.example.ejerciciocrud;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -48,46 +45,33 @@ public class MtmtoPersService implements ImtmtoPers {
 
     @Override
     public Persona updPersona(int idBuscado, Optional<String> nuevoNombre,
-                                             Optional<Integer> nuevaEdad,
-                                             Optional<String> nuevaPobla) {
+                              Optional<Integer> nuevaEdad,
+                              Optional<String> nuevaPobla) {
 
 
+        //Vuelca en consola el contenido de la lista
         mtmtoPers.getLista();
 
-        Iterator<Persona> it = listaPersonas.iterator();
-        boolean existe = false;
         Persona persLista = null;
-        int indLista=0;
+        Persona personaBuscada = null;
+        int indLista = 0;
 
-        while (it.hasNext()) {
-            persLista = it.next();
-            if (persLista.id == idBuscado) {
-                indLista = listaPersonas.indexOf(persLista);
-                existe = true;
-                break;
-            }
+        try {
+            personaBuscada = listaPersonas.stream().filter(t -> t.getId() == idBuscado).findFirst().get();
+        } catch (NoSuchElementException exception) {
+            return null;
         }
 
-        if(existe == true) {
+        indLista = listaPersonas.indexOf(personaBuscada);
+        persLista = listaPersonas.get(indLista);
 
-            //Sólo se modificarán los campos que vengan informados, si algún valor no está presente, se deja como estaba.
-            if (nuevoNombre.isPresent()) {
-                listaPersonas.get(indLista).setNombre(nuevoNombre.get());
-            }
-            if (nuevaEdad.isPresent()) {
-                listaPersonas.get(indLista).setEdad(nuevaEdad.get());
-            }
-            if (nuevaPobla.isPresent()) {
-                listaPersonas.get(indLista).setPobla(nuevaPobla.get());
-            }
 
-        }
-        else
-        {
-            persLista = null;
-        }
+        //Sólo se modificarán los campos que vengan informados, si algún valor no está presente, se deja como estaba.
+        if (nuevoNombre.isPresent()) { listaPersonas.get(indLista).setNombre(nuevoNombre.get()); }
+        if (nuevaEdad.isPresent())   { listaPersonas.get(indLista).setEdad(nuevaEdad.get()); }
+        if (nuevaPobla.isPresent())  { listaPersonas.get(indLista).setPobla(nuevaPobla.get()); }
 
-        return  persLista;
+        return persLista;
 
     }
 
@@ -99,26 +83,25 @@ public class MtmtoPersService implements ImtmtoPers {
     @Override
     public Persona delPersona(int idBuscado) {
 
-        Iterator<Persona> it = listaPersonas.iterator();
-        boolean existe = false;
+
+        //Vuelca en consola el contenido de la lista
+        mtmtoPers.getLista();
+
         Persona persLista = null;
+        Persona personaBuscada = null;
+        int indLista = 0;
 
-        while (it.hasNext()) {
-            persLista = it.next();
-            if (persLista.id == idBuscado) {
-                existe = true;
-                break;
-            }
+        try {
+            personaBuscada = listaPersonas.stream().filter(t -> t.getId() == idBuscado).findFirst().get();
+        } catch (NoSuchElementException exception) {
+            return null;
         }
 
-        //No se ha encontrado persona para borrar
-        if(existe == false) {
-            persLista = null;
-        }
-        else {
-            listaPersonas.remove(idBuscado);
-            mtmtoPers.getLista();  //Escribe contenido de la lista en consola
-        }
+        indLista  = listaPersonas.indexOf(personaBuscada);
+        persLista = listaPersonas.get(indLista);
+
+        listaPersonas.remove(indLista);
+        mtmtoPers.getLista();  //Escribe contenido de la lista en consola
 
         return persLista;
 
@@ -134,44 +117,29 @@ public class MtmtoPersService implements ImtmtoPers {
     public Persona consPersona(Optional<Integer> idBuscado,
                                Optional<String> nombre) {
 
-        Persona persLista = null;
+        Persona persLista;
         boolean existe = false;
+        Persona personaBuscada = null;
+        int indLista = 0;
 
-        if ((nombre.isPresent()) || (idBuscado.isPresent())) {
-
-            Iterator<Persona> it = listaPersonas.iterator();
-
-            while (it.hasNext())
-            {
-                persLista = it.next();
-
-                if (idBuscado.isPresent() && persLista.id == idBuscado.get()) {
-                    existe = true;
-                    break;
-                }
-
-                if (nombre.isPresent() && persLista.nombre.equals(nombre.get())) {
-                    existe = true;
-                    break;
-
-                }
-            }
-
-            if (existe == false) {
-                System.out.println("Persona no hallada");
-                persLista = null;
-            }
-
-            //Escribe contenido de la lista en consola
-            mtmtoPers.getLista();
+        mtmtoPers.getLista();
 
 
-        } else {
-            persLista = null;
+        //Campos vacíos = nada que consultar...
+        if ( (nombre.isEmpty()) && (idBuscado.isEmpty()) ) return null;
+
+        try {
+            if(idBuscado.isPresent()) { personaBuscada = listaPersonas.stream().filter(t -> t.getId() == idBuscado.get()).findFirst().get(); }
+            if(nombre.isPresent())    { personaBuscada = listaPersonas.stream().filter(t -> t.getNombre().equals(nombre.get())).findFirst().get(); }
+        } catch (NoSuchElementException exception) {
+            return null;
         }
 
-        //System.out.println("Persona consultada: " + persLista.id + " " + persLista.getNombre() + " " + persLista.edad + " " + persLista.poblacion);
+        indLista = listaPersonas.indexOf(personaBuscada);
+        persLista = listaPersonas.get(indLista);
+
         return persLista;
+
     }
 
 

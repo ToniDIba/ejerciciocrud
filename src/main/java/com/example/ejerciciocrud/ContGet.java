@@ -40,11 +40,11 @@ public class ContGet {
                 }
 
                 if (nombre.isPresent()) {
-                    textoReturn = "No se ha encontrado persona con 'nombre: ' " + nombre + " en la lista";
+                    textoReturn = "No se ha encontrado persona con 'nombre: ' " + nombre.get() + " en la lista";
                 }
 
             } else {
-                textoReturn =  "Persona consultada. Id: " + id.get() +
+                textoReturn =  "Persona consultada. Id: " + persReturn.getId() +
                                ", nombre: " + persReturn.getNombre() +
                                ", edad: " + persReturn.getEdad() +
                                ", poblacion: " + persReturn.getPobla();
