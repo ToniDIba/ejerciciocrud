@@ -44,22 +44,27 @@ public class MtmtoPersService implements ImtmtoPers {
      * */
 
     @Override
-    public Persona updPersona(int idBuscado, Optional<String> nuevoNombre,
-                              Optional<Integer> nuevaEdad,
-                              Optional<String> nuevaPobla) {
+    public Persona updPersona(Persona unaPers) {
 
 
         //Vuelca en consola el contenido de la lista
         mtmtoPers.getLista();
 
+        int idBuscado = unaPers.getId();
+
         Persona persLista = null;
         Persona personaBuscada = null;
         int indLista = 0;
 
+
+        Optional<String> nuevoNombre = Optional.ofNullable(unaPers.getNombre());
+        Optional<Integer> nuevaEdad = Optional.ofNullable(unaPers.getEdad());
+        Optional<String> nuevaPobla = Optional.ofNullable(unaPers.getPobla());
+
         try {
             personaBuscada = listaPersonas.stream().filter(t -> t.getId() == idBuscado).findFirst().get();
         } catch (NoSuchElementException exception) {
-            return null;
+            return new Persona(idBuscado,"Persona no hallada en lista",0,"null");
         }
 
         indLista = listaPersonas.indexOf(personaBuscada);
@@ -71,6 +76,7 @@ public class MtmtoPersService implements ImtmtoPers {
         if (nuevaEdad.isPresent())   { listaPersonas.get(indLista).setEdad(nuevaEdad.get()); }
         if (nuevaPobla.isPresent())  { listaPersonas.get(indLista).setPobla(nuevaPobla.get()); }
 
+        mtmtoPers.getLista();
         return persLista;
 
     }
@@ -118,15 +124,10 @@ public class MtmtoPersService implements ImtmtoPers {
                                Optional<String> nombre) {
 
         Persona persLista;
-        boolean existe = false;
         Persona personaBuscada = null;
         int indLista = 0;
 
         mtmtoPers.getLista();
-
-
-        //Campos vacíos = nada que consultar...
-        if ( (nombre.isEmpty()) && (idBuscado.isEmpty()) ) return null;
 
         try {
             if(idBuscado.isPresent()) { personaBuscada = listaPersonas.stream().filter(t -> t.getId() == idBuscado.get()).findFirst().get(); }

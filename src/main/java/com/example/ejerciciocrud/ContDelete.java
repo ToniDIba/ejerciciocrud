@@ -1,4 +1,17 @@
-//http://localhost:8080/persona/delete/?id=0 (DELETE)
+//------------ usando @RequestParam -----------------
+//http://localhost:8080/persona/delete/?id=0
+//       @RequestMapping(value = "delete")
+//    public String deletePersona(@RequestParam(value = "id", required = true) int id) {
+
+//------------- usando @PathVariable--------------
+//http://localhost:8080/persona/delete/0
+//       @DeleteMapping("delete/{id}")
+//       @ResponseBody
+//       public String deletePersonaPorId(@PathVariable int id) {
+
+//---------------------------------------------------------------------------------------------------
+
+
 package com.example.ejerciciocrud;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping(value = "/persona")
@@ -21,8 +35,13 @@ public class ContDelete {
     private ImtmtoPers mtmtoPers;
     boolean resultado;
 
-    @RequestMapping(value = "/delete/")
-    String deletePersona(@RequestParam(value = "id", required = true) int id) {
+    // @RequestMapping(value = "/delete/")
+    // public String deletePersona(@RequestParam(value = "id", required = true) int id) {
+
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public String deletePersonaPorId(@PathVariable("id") int id) {
 
         Persona persReturn = mtmtoPers.delPersona(id);
 

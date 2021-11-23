@@ -1,4 +1,4 @@
-//http://localhost:8080/persona/consulta/?id=1 (POST)
+//http://localhost:8085/persona/consulta/nombreOrId(POST)
 package com.example.ejerciciocrud;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,43 +21,46 @@ public class ContGet {
     @Autowired
     private ImtmtoPers mtmtoPers;
 
-    @RequestMapping(value = "/consulta/")
+    /*@RequestMapping(value = "/consulta/")
     String consultaPersona(@RequestParam(value = "id", required = false) Optional<Integer> id,
-                           @RequestParam(value = "nombre", required = false) Optional<String> nombre) {
+                           @RequestParam(value = "nombre", required = false) Optional<String> nombre) {*/
 
 
-        String textoReturn="";
+    @GetMapping("consulta/{idOrName}")
+    public Persona consultaPorNombreOrId(@PathVariable String idOrName) {
 
-        if (id.isEmpty() && nombre.isEmpty()) {
-            textoReturn = "Informe 'Id' o 'Nombre' para poder hacer la consulta";
-        } else {
+        Optional<String> nombreParam = Optional.empty();
+        Optional<Integer> idParam = Optional.empty();
 
-            Persona persReturn = mtmtoPers.consPersona(id, nombre);
+        idOrName = idOrName.trim();
 
-            if (Objects.isNull(persReturn)) {
-                if (id.isPresent()) {
-                    textoReturn =  "No se ha encontrado persona con 'id: ' " + id.get() + " en la lista";
-                }
 
-                if (nombre.isPresent()) {
-                    textoReturn = "No se ha encontrado persona con 'nombre: ' " + nombre.get() + " en la lista";
-                }
+        //FastFail
+        if (idOrName.length() == 0) return new Persona(999, "Informe 'Id' o 'Nombre' para poder hacer la consulta", 0, "null");
 
-            } else {
-                textoReturn =  "Persona consultada. Id: " + persReturn.getId() +
-                               ", nombre: " + persReturn.getNombre() +
-                               ", edad: " + persReturn.getEdad() +
-                               ", poblacion: " + persReturn.getPobla();
-            }
+        /* *
+         * Extrae de param "idOrName" un 'int' correspondiente al 'id', o un String correspondiente al nombre buscado
+         * */
+        try {
+            idParam = Optional.ofNullable(Integer.parseInt(idOrName));
+        } catch (NumberFormatException e) {
+            nombreParam = Optional.ofNullable(idOrName);
         }
 
-        return textoReturn;
-        //return mtmtoPers.consPersona(id, nombre);
+
+        Persona persReturn = mtmtoPers.consPersona(idParam, nombreParam);
+
+
+        if (Objects.isNull(persReturn)) {
+
+            persReturn = ( idParam.isPresent() ?
+                    new Persona(999, "No se ha encontrado persona con id: " + "'" + idParam.get() + "'" + " en la lista", 0, "null") :
+                    new Persona(999, "No se ha encontrado persona con nombre: " + "'" + nombreParam.get() + "'" + " en la lista", 0, "null") );
+        }
+
+        return persReturn;
+
     }
 
+
 }
-
-
-
-
-

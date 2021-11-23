@@ -9,10 +9,18 @@ public interface ImtmtoPers {
                        Optional<Integer> edad,
                        Optional<String> poblacion);
 
+
+
+/*---------------------------------------------------------------------------
     // Modifica los datos de una persona que ya exista en la lista
     Persona updPersona(int id, Optional<String> nombre,
                                Optional<Integer> edad,
-                               Optional<String> poblacion);
+                               Optional<String> poblacion); */
+
+
+    // Modifica los datos de una persona que ya exista en la lista
+    Persona updPersona(Persona unaPers);
+/*--------------------------------------------------------------------------*/
 
     // Borra persona existente en la lista
     Persona delPersona(int id);

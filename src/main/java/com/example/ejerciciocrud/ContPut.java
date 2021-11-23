@@ -1,55 +1,43 @@
-//http://localhost:8080/persona/modificacion/?id=0 (PUT)
+//http://localhost:8080/persona/modificacion/0(PUT)
 package com.example.ejerciciocrud;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.OpEQ;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
 import java.util.Optional;
 
+
 @RestController
-@RequestMapping(value = "/persona")
-
-
+@RequestMapping(value = "/persona/")
 
 /* *
  * Modificación de una persona
  * */
+
+//http://localhost:8080/persona/modificacion/0/carlos/55/gerona
 
 public class ContPut {
 
     @Autowired
     private ImtmtoPers mtmtoPers;
 
-    @RequestMapping(value = "/modificacion/")
+    @PutMapping("modificacion/{id}/{nombre}/{edad}/{poblacion}")
 
+    public Persona getData(@PathVariable Optional<Integer> id,
+                           @PathVariable(required = false) Optional<String> nombre,
+                           @PathVariable(required = false) Optional<Integer> edad,
+                           @PathVariable(required = false) Optional<String> poblacion)
 
-    String modificacionPersona(@RequestParam(value = "id",        required = true)  Optional< Integer > id,
-                                @RequestParam(value = "nombre",    required = false) Optional< String > nombre,
-                                @RequestParam(value = "edad",      required = false) Optional < Integer > edad,
-                                @RequestParam(value = "poblacion", required = false) Optional < String > poblacion )
-    {
+       {
 
-        if(nombre.isEmpty() && edad.isEmpty() && poblacion.isEmpty() ) {
-            return " No se ha informado nada para modificar";
-        }
+        System.out.println("Id: " + id.get());
+        System.out.println("Nombre: " + nombre.get());
+        System.out.println("Edad: " + edad.get());
+        System.out.println("Pobla: " + poblacion.get());
 
-        Persona persReturn = mtmtoPers.updPersona(id.get() ,nombre ,edad ,poblacion);
-
-        if (Objects.isNull(persReturn)) {
-            return "No existe persona con id = " + id.get() + " para modificar";
-        } else {
-            mtmtoPers.getLista(); //Muestra en consola contenido de la lista tras la modificación
-            return "Persona modificada. Id: " + id.get() +
-                                 ", nombre: " + persReturn.getNombre() +
-                                   ", edad: " + persReturn.getEdad() +
-                              ", poblacion: " + persReturn.getPobla();
-        }
-
-
-        // Retorna la persona que acabamos de modificar
-        // return mtmtoPers.updPersona(id.get() ,nombre ,edad ,poblacion);
-
+        return mtmtoPers.updPersona(new Persona( id.get(), nombre.get(), edad.get(), poblacion.get()) );
     }
+
 
 }

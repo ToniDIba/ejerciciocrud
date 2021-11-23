@@ -11,6 +11,10 @@ public class Persona {
         this.poblacion = poblacion;
     }
 
+    public Persona() {
+
+    }
+
 
     public int getId() {
         return id;
