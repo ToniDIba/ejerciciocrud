@@ -1,18 +1,19 @@
 package com.example.ejerciciocrud;
 
+import java.util.Optional;
+
 public class Persona {
 
 
-    public Persona(int id, String nombre, int edad, String poblacion)
+    //public Persona(int id, String nombre, int edad, String poblacion)
+    public Persona(int id, Optional<String> nombre,
+                           Optional<Integer> edad,
+                           Optional <String> poblacion)
     {
         this.id = id;
         this.nombre = nombre;
         this.edad = edad;
         this.poblacion = poblacion;
-    }
-
-    public Persona() {
-
     }
 
 
@@ -24,32 +25,35 @@ public class Persona {
         this.id = id;
     }
 
-    public String getNombre() { return nombre; }
+    public Optional<String> getNombre() { return nombre; }
 
-    public void setNombre(String nombre) {
+    public void setNombre(Optional<String> nombre) {
         this.nombre = nombre;
     }
 
-    public int getEdad() {
+    public Optional<Integer> getEdad() {
         return edad;
     }
 
-    public void setEdad(int edad) {
+    public void setEdad(Optional<Integer> edad) {
         this.edad = edad;
     }
 
-    public String getPobla() {
+    public Optional<String> getPobla() {
         return poblacion;
     }
 
-    public void setPobla(String pobla) {
-        this.poblacion = pobla;
+    public void setPobla(Optional<String> pobla) {
+        this.poblacion = poblacion;
     }
 
+
+
     public int id;
-    public String nombre;
-    public int edad;
-    public String poblacion;
+    public Optional<String> nombre;
+    public Optional<Integer> edad;
+    public Optional<String> poblacion;
+
 
 
 }

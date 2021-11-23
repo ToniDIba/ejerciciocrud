@@ -29,14 +29,14 @@ public class ContGet {
     @GetMapping("consulta/{idOrName}")
     public Persona consultaPorNombreOrId(@PathVariable String idOrName) {
 
-        Optional<String> nombreParam = Optional.empty();
         Optional<Integer> idParam = Optional.empty();
+        Optional<String> nombreParam = Optional.empty();
 
         idOrName = idOrName.trim();
 
 
         //FastFail
-        if (idOrName.length() == 0) return new Persona(999, "Informe 'Id' o 'Nombre' para poder hacer la consulta", 0, "null");
+        if (idOrName.length() == 0) return new Persona(999, Optional.ofNullable("Informe 'Id' o 'Nombre' para poder hacer la consulta"), Optional.empty(), Optional.empty() );
 
         /* *
          * Extrae de param "idOrName" un 'int' correspondiente al 'id', o un String correspondiente al nombre buscado
@@ -52,10 +52,10 @@ public class ContGet {
 
 
         if (Objects.isNull(persReturn)) {
-
             persReturn = ( idParam.isPresent() ?
-                    new Persona(999, "No se ha encontrado persona con id: " + "'" + idParam.get() + "'" + " en la lista", 0, "null") :
-                    new Persona(999, "No se ha encontrado persona con nombre: " + "'" + nombreParam.get() + "'" + " en la lista", 0, "null") );
+                 new Persona(999, Optional.ofNullable("No se ha encontrado persona con id: " + "'" + idParam.get() + "'" + " en la lista"), Optional.empty(), Optional.empty() ) :
+                 new Persona(999, Optional.ofNullable("No se ha encontrado persona con nombre: " + "'" + nombreParam.get() + "'" + " en la lista"), Optional.empty(), Optional.empty()));
+
         }
 
         return persReturn;

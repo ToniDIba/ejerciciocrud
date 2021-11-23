@@ -26,7 +26,7 @@ public class MtmtoPersService implements ImtmtoPers {
 
         int id = listaPersonas.size();
 
-        Persona pers = new Persona(id, nombre.get(), edad.get(), poblacion.get());
+        Persona pers = new Persona(id, nombre, edad, poblacion);
         listaPersonas.add(pers);
 
         //Escribe contenido de la lista en consola
@@ -56,15 +56,14 @@ public class MtmtoPersService implements ImtmtoPers {
         Persona personaBuscada = null;
         int indLista = 0;
 
-
-        Optional<String> nuevoNombre = Optional.ofNullable(unaPers.getNombre());
-        Optional<Integer> nuevaEdad = Optional.ofNullable(unaPers.getEdad());
-        Optional<String> nuevaPobla = Optional.ofNullable(unaPers.getPobla());
+        Optional<String> nuevoNombre = unaPers.getNombre();
+        Optional<Integer> nuevaEdad = unaPers.getEdad();
+        Optional<String> nuevaPobla = unaPers.getPobla();
 
         try {
             personaBuscada = listaPersonas.stream().filter(t -> t.getId() == idBuscado).findFirst().get();
         } catch (NoSuchElementException exception) {
-            return new Persona(idBuscado,"Persona no hallada en lista",0,"null");
+            return new Persona(idBuscado, nuevoNombre,nuevaEdad,nuevaPobla);
         }
 
         indLista = listaPersonas.indexOf(personaBuscada);
@@ -72,9 +71,9 @@ public class MtmtoPersService implements ImtmtoPers {
 
 
         //Sólo se modificarán los campos que vengan informados, si algún valor no está presente, se deja como estaba.
-        if (nuevoNombre.isPresent()) { listaPersonas.get(indLista).setNombre(nuevoNombre.get()); }
-        if (nuevaEdad.isPresent())   { listaPersonas.get(indLista).setEdad(nuevaEdad.get()); }
-        if (nuevaPobla.isPresent())  { listaPersonas.get(indLista).setPobla(nuevaPobla.get()); }
+        if (nuevoNombre.isPresent()) { listaPersonas.get(indLista).setNombre(nuevoNombre); }
+        if (nuevaEdad.isPresent())   { listaPersonas.get(indLista).setEdad(nuevaEdad); }
+        if (nuevaPobla.isPresent())  { listaPersonas.get(indLista).setPobla(nuevaPobla); }
 
         mtmtoPers.getLista();
         return persLista;
