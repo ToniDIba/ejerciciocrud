@@ -4,8 +4,6 @@ import java.util.Optional;
 
 public class Persona {
 
-
-    //public Persona(int id, String nombre, int edad, String poblacion)
     public Persona(int id, Optional<String> nombre,
                            Optional<Integer> edad,
                            Optional <String> poblacion)

@@ -1,16 +1,9 @@
-//http://localhost:8080/persona/modificacion/0(PUT)
+
 package com.example.ejerciciocrud;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.spel.ast.OpEQ;
 import org.springframework.web.bind.annotation.*;
-
-import javax.swing.text.html.parser.Parser;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-
+import java.util.*;
 import static java.lang.Integer.parseInt;
 
 
@@ -30,7 +23,7 @@ public class ContPut {
     private ImtmtoPers mtmtoPers;
 
     @PutMapping("modificacion/{id}/{nombre}/{edad}/{poblacion}")
-    public Persona getData(@PathVariable Map<String, String> pathVarsMap) {
+    public String getData(@PathVariable Map<String, String> pathVarsMap) {
 
         int id = 0;
         Optional<String> nombre = Optional.empty();
@@ -40,21 +33,21 @@ public class ContPut {
 
         for (Map.Entry<String, String> entry : pathVarsMap.entrySet()) {
             String key = entry.getKey();
-            String tab = entry.getValue();
+            String valor = entry.getValue();
 
 
-            switch(key)
-            {
+            switch (key) {
                 case "id":
-                    id = parseInt(tab);
+                    id = parseInt(valor);
                 case "nombre":
-                    if(tab.trim().length() > 0) nombre = Optional.ofNullable(tab); //Retorna un valor si viene informada y, sino, un Optional.empty
+                    if (valor.trim().length() > 0)
+                        nombre = Optional.ofNullable(valor); //Retorna un valor si viene informada y, sino, un Optional.empty
                     break;
                 case "edad":
-                    if(tab.trim().length() > 0) edad = Optional.ofNullable(Integer.valueOf(tab));
+                    if (valor.trim().length() > 0) edad = Optional.ofNullable(Integer.valueOf(valor));
                     break;
                 case "poblacion":
-                    if(tab.trim().length() > 0) poblacion = Optional.ofNullable(tab);
+                    if (valor.trim().length() > 0) poblacion = Optional.ofNullable(valor);
                     break;
                 default:
                     System.exit(1);
@@ -62,7 +55,18 @@ public class ContPut {
 
         }
 
-        return mtmtoPers.updPersona(new Persona(id, nombre, edad, poblacion));
+        Persona personaRetornada = mtmtoPers.updPersona(new Persona(id, nombre, edad, poblacion));
+
+        if (Objects.isNull(personaRetornada)) {
+            return "No existe persona con id = " + id + " para modificar";
+        } else {
+            mtmtoPers.getLista(); //Muestra en consola contenido de la lista tras la modificación
+            return "Persona modificada con 'Id' : " + id +
+                    ", nombre: " + personaRetornada.getNombre() +
+                    ", edad: " + personaRetornada.getEdad() +
+                    ", poblacion: " + personaRetornada.getPobla();
+        }
+
     }
 
 }

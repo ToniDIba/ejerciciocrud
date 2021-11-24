@@ -24,7 +24,15 @@ public class MtmtoPersService implements ImtmtoPers {
                               Optional<Integer> edad,
                               Optional<String> poblacion) {
 
-        int id = listaPersonas.size();
+        int id = 0;
+
+        /**
+         *  Busco id de la última persona añadida a la lista
+         */
+        if(listaPersonas.size() > 0) {
+            Persona ultimaPersona = listaPersonas.get(listaPersonas.size()-1);
+            id = ultimaPersona.getId() + 1;
+        }
 
         Persona pers = new Persona(id, nombre, edad, poblacion);
         listaPersonas.add(pers);
@@ -63,7 +71,7 @@ public class MtmtoPersService implements ImtmtoPers {
         try {
             personaBuscada = listaPersonas.stream().filter(t -> t.getId() == idBuscado).findFirst().get();
         } catch (NoSuchElementException exception) {
-            return new Persona(idBuscado, nuevoNombre,nuevaEdad,nuevaPobla);
+            return null;
         }
 
         indLista = listaPersonas.indexOf(personaBuscada);
@@ -80,6 +88,8 @@ public class MtmtoPersService implements ImtmtoPers {
         return persLista;
 
     }
+
+
 
 
     /* **
@@ -107,11 +117,13 @@ public class MtmtoPersService implements ImtmtoPers {
         persLista = listaPersonas.get(indLista);
 
         listaPersonas.remove(indLista);
-        mtmtoPers.getLista();  //Escribe contenido de la lista en consola
 
+        mtmtoPers.getLista();  //Escribe contenido de la lista en consola
         return persLista;
 
     }
+
+
 
 
 
@@ -127,11 +139,11 @@ public class MtmtoPersService implements ImtmtoPers {
         Persona personaBuscada = null;
         int indLista = 0;
 
-        mtmtoPers.getLista();
+        mtmtoPers.getLista(); //Vuelca el contenido de la lista en consola
 
         try {
             if(idBuscado.isPresent()) { personaBuscada = listaPersonas.stream().filter(t -> t.getId() == idBuscado.get()).findFirst().get(); }
-            if(nombre.isPresent())    { personaBuscada = listaPersonas.stream().filter(t -> t.getNombre().equals(nombre.get())).findFirst().get(); }
+            if(nombre.isPresent())    { personaBuscada = listaPersonas.stream().filter(t -> t.getNombre().get().equals(nombre.get())).findFirst().get(); }
         } catch (NoSuchElementException exception) {
             return null;
         }
@@ -142,6 +154,8 @@ public class MtmtoPersService implements ImtmtoPers {
         return persLista;
 
     }
+
+
 
 
     /* **
