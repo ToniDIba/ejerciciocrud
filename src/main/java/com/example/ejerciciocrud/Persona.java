@@ -44,7 +44,7 @@ public class Persona {
     }
 
     public void setPobla(Optional<String> pobla) {
-        this.poblacion = poblacion;
+        this.poblacion = pobla;
     }
 
 

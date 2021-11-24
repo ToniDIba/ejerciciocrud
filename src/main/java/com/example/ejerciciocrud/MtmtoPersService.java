@@ -70,6 +70,7 @@ public class MtmtoPersService implements ImtmtoPers {
         persLista = listaPersonas.get(indLista);
 
 
+        System.out.println("Cambiados: " + nuevoNombre + " " + nuevaEdad + " " + nuevaPobla);
         //Sólo se modificarán los campos que vengan informados, si algún valor no está presente, se deja como estaba.
         if (nuevoNombre.isPresent()) { listaPersonas.get(indLista).setNombre(nuevoNombre); }
         if (nuevaEdad.isPresent())   { listaPersonas.get(indLista).setEdad(nuevaEdad); }

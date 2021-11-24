@@ -37,7 +37,6 @@ public class ContPut {
         Optional<Integer> edad = Optional.empty();
         Optional<String> poblacion = Optional.empty();
 
-        String tonto;
 
         for (Map.Entry<String, String> entry : pathVarsMap.entrySet()) {
             String key = entry.getKey();
@@ -47,7 +46,7 @@ public class ContPut {
             switch(key)
             {
                 case "id":
-                    break;
+                    id = parseInt(tab);
                 case "nombre":
                     if(tab.trim().length() > 0) nombre = Optional.ofNullable(tab); //Retorna un valor si viene informada y, sino, un Optional.empty
                     break;
